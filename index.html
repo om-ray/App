@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lottie Animation</title>
+    <!-- Include the Lottie web library from a CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.10.2/lottie.min.js"></script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: transparent;
+      }
+      #lottie {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="lottie"></div>
+    <script>
+      // Initialize the Lottie animation
+      var animation = lottie.loadAnimation({
+        container: document.getElementById("lottie"),
+        renderer: "svg",
+        loop: false, // Set to true if you want continuous looping
+        autoplay: false, // Control autoplay manually
+        path: "https://path-to-your-lottie-file.json", // Replace with your Lottie file URL or relative path
+      });
+
+      // Optional: Create functions to control the animation
+      function playAnimation() {
+        animation.play();
+      }
+      function stopAnimation() {
+        animation.stop();
+      }
+      function pauseAnimation() {
+        animation.pause();
+      }
+
+      // Listen for messages from Thunkable (if you want to send commands dynamically)
+      window.addEventListener("message", function (event) {
+        if (event.data === "play") playAnimation();
+        else if (event.data === "stop") stopAnimation();
+        else if (event.data === "pause") pauseAnimation();
+      });
+    </script>
+  </body>
+</html>
