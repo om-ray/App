@@ -30,6 +30,9 @@
     ></lottie-player>
     <script>
       const player = document.getElementById("lottie");
+      let touchStartX = 0;
+      let currentState = 1; // Start with state 1
+      
       // Interactive Lottie:
       player.addEventListener("load", () => {
         // Access the interactivity API
@@ -37,6 +40,56 @@
 
         // Query the current state
         console.log("Current state is", interactivity.state.name);
+        
+        // Go to initial state
+        interactivity.goToState(currentState.toString(), { duration: 0.5 });
+        
+        // Add touch event listeners for swipe gestures
+        player.addEventListener('touchstart', handleTouchStart, false);
+        player.addEventListener('touchmove', handleTouchMove, false);
+        
+        // Listen to state changes
+        interactivity.on('transitionstart', (event) => {
+          console.log('State changing from', event.from.name, 'to', event.to.name);
+        });
+        
+        // Function to handle touch start
+        function handleTouchStart(event) {
+          touchStartX = event.touches[0].clientX;
+        }
+        
+        // Function to handle touch move for swipe detection
+        function handleTouchMove(event) {
+          if (!touchStartX) {
+            return;
+          }
+          
+          const touchEndX = event.touches[0].clientX;
+          const diff = touchStartX - touchEndX;
+          
+          // Minimum distance required to be considered a swipe
+          const threshold = 50;
+          
+          if (Math.abs(diff) > threshold) {
+            // Swipe left: go to next state
+            if (diff > 0) {
+              if (currentState < 3) {
+                currentState++;
+                interactivity.goToState(currentState.toString(), { duration: 0.5 });
+              }
+            }
+            // Swipe right: go to previous state
+            else {
+              if (currentState > 1) {
+                currentState--;
+                interactivity.goToState(currentState.toString(), { duration: 0.5 });
+              }
+            }
+            
+            // Reset touch start to prevent multiple triggers
+            touchStartX = 0;
+          }
+        }
       });
     </script>
     <!-- <div id="lottie"></div>
