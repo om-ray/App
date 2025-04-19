@@ -82,11 +82,13 @@
                 currentState += 0.5;
                 interactivity.goToState(currentState.toString(), {
                   duration: 0.15,
+                  easing: { o: { x: 15, y: 0 }, i: { x: 1, y: 1 } },
                 });
                 setTimeout(() => {
                   currentState += 0.5;
                   interactivity.goToState(currentState.toString(), {
                     duration: 0.15,
+                    easing: { o: { x: 1, y: 0 }, i: { x: 1, y: 1 } },
                   });
                 }, 100);
               }
@@ -97,11 +99,13 @@
                 currentState -= 0.5;
                 interactivity.goToState(currentState.toString(), {
                   duration: 0.15,
+                  easing: { o: { x: 1, y: 0 }, i: { x: 1, y: 1 } },
                 });
                 setTimeout(() => {
                   currentState -= 0.5;
                   interactivity.goToState(currentState.toString(), {
                     duration: 0.15,
+                    easing: { o: { x: 1, y: 0 }, i: { x: 1, y: 1 } },
                   });
                 }, 100);
               }
