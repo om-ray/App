@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lottie Animation</title>
+    <!-- Include the Lottie web library from a CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.10.2/lottie.min.js"></script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #e9e9e9;
+      }
+      #lottie {
+        background-color: #e9e9e9;
+        width: 100%;
+        height: 100%;
+        max-height: 370px;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="https://cdn.lottielab.com/s/lottie-player@1.x/player-web.min.js"></script>
+    <lottie-player
+      id="lottie"
+      autoplay
+      src="https://cdn.lottielab.com/l/CbmZuLNH79MKZQ.json"
+    ></lottie-player>
+    <script>
+      const player = document.getElementById("lottie");
+      let touchStartX = 0;
+      let currentState = 1; // Start with state 1
+
+      // Interactive Lottie:
+      player.addEventListener("load", () => {
+        // Access the interactivity API
+        const interactivity = player.interactivity;
+
+        // Query the current state
+        console.log("Current state is", interactivity.state.name);
+
+        // Go to initial state
+        interactivity.goToState(currentState.toString(), { duration: 0.5 });
+
+        // Add touch event listeners for swipe gestures
+        player.addEventListener("touchstart", handleTouchStart, false);
+        player.addEventListener("touchmove", handleTouchMove, false);
+
+        // Listen to state changes
+        interactivity.on("transitionstart", (event) => {
+          console.log(
+            "State changing from",
+            event.from.name,
+            "to",
+            event.to.name
+          );
+        });
+
+        // Function to handle touch start
+        function handleTouchStart(event) {
+          touchStartX = event.touches[0].clientX;
+        }
+
+        // Function to handle touch move for swipe detection
+        function handleTouchMove(event) {
+          if (!touchStartX) {
+            return;
+          }
+
+          const touchEndX = event.touches[0].clientX;
+          const diff = touchStartX - touchEndX;
+
+          // Minimum distance required to be considered a swipe
+          const threshold = 50;
+
+          if (Math.abs(diff) > threshold) {
+            // Swipe left: go to next state
+            if (diff > 0) {
+              if (currentState < 3) {
+                currentState++;
+                interactivity.goToState(currentState.toString(), {
+                  duration: 0.15,
+                  easing: { o: { x: 15, y: 0 }, i: { x: 1, y: 1 } },
+                });
+
+                // if (currentState === 3) {
+                //   setTimeout(() => {
+                //     interactivity.goToState("4", {
+                //       duration: 0.15,
+                //       easing: { o: { x: 15, y: 0 }, i: { x: 1, y: 1 } },
+                //     });
+                //   }, 1500);
+                // }
+              } else {
+                return;
+              }
+            }
+
+            // Reset touch start to prevent multiple triggers
+            touchStartX = 0;
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
