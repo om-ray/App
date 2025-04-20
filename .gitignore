@@ -2,3 +2,6 @@
 yarn.lock
 *.png
 /node_modules
+# /ios
+ios_source.tar.gz
+l1j23l13.mp4.lottie.json
